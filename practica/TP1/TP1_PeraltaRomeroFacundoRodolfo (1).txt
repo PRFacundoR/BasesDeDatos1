@@ -1,0 +1,71 @@
+1) y 2)
+a) Entidades:
+Recetas(fuerte):nombre(atributo clave, compuesto, monovaluado), tiempo(atributo simple, monovaluado), modo(atributo simple, multivaluado), comentario(atributo simple, monovaluado).
+
+Condimentos(fuerte): nombre(atributo clave, simple, multivaluado).
+
+Categorias receta(fuerte): Nombre(atributo simple, multivaluado), id(atributo clave,simple, monovaluado).
+
+Categorias Ingredientes(fuerte): Nombre(atributo simple, monovaludo), id(atributo clave).
+
+
+
+b) Entidades: 
+Usuarios(fuerte):telefono(atributo monovaluado, simple), mail(atributo clave, simple, monovaluado), nombre(atributo compuesto, monovaluado), dirección(atributo compuesto, monovaluado).
+
+Negocios(fuerte):nombre(atributo clave, simple,monovaluado), dirección(atributo monovaluado, compuesto), telefono(atributo simple, monovaluado).
+
+Pedidos(debil):fecha(atributo clave, simple, monovaluado), monto(atributo simple, monovaluado). 
+
+Categorias(fuerte): nombre(atributo simple, monovaluado), id(atributo clave, atributo simple, monovaluado).
+
+
+
+c) Entidades: 
+Personajes(fuerte):nombre(atributo clave, simple, monovaluable), salud(atributo monovaluable,simple), energía(atributo monovaluable,simple), fuerza(atributo monovaluable,simple), destreza(atributo monovaluable,simple), inteligencia(atributo monovaluable,simple), velocidad(atributo monovaluable, simple).
+
+Inventario(debil):capicidad(atributo clave,simple, monovaluable) .
+
+Item(fuerte):nombre(atributo clave, simple, monovaluado), nivel(atributo multivaluable,simple), poder(atributo multivaluable,simple), durabilidad(atributo multivaluable,simple), fecha(atributo simple, monovaluado). 
+
+Categorias(fuerte):nombre(atributo clave, simple, monovaluado).
+
+
+
+d) Entidades: 
+Cliente(fuerte):nombre(atributo simple, monovaluado), apellido(atributo simple, monovaluado), DNI(atributo clave, atributo simple, monovaluado), direccion(atributo compuesto, monovaluado), telefono(atributo simple, monovaluado) . 
+
+Reserva(debil):fecha(atributo clave, simple, monovaluado), hora(atributo simple, monovaluado), monto(atributo simple, monovaluado). 
+
+Servicios(fuerte):tipo(atributo clave, simple, monovaluado), costo(atributo simple, monovaluado).
+
+
+
+e) Entidades: 
+Software(fuerte):nombre(atributo clave,monovaluado, simple), lenguaje(atributo simple, monovaluado), plataforma(atributo simple, monovaluado).
+
+version(debil):nombre(atributo clave, monovaluado, simple), cambios(atributo simple, monovaluado), errores(atributo simple, monovaluado). 
+
+Clientes(fuerte):nombre(atributo simple, monovaluado), correo(atributo simple, monovaluado), domicilio(atributo clave, compuesto, monovaluado), telefono(atributo simple, monovaluado). 
+
+Productos(fuerte):nombre(atributo clave, simple, monovaluado), version(atributo simple, monovaluado).
+
+
+
+f) Entidades: 
+Participantes(fuerte):nombre(atributo clave, monovaluado, simple), fechaDeNac(atributo monovaluado, simple), sexo(atributo monovaluado, simple).
+
+Interpretaciones(debil):fecha(atributo clave, monovaluado, simple), duracion(atributo monovaluado, simple), puntajeF(atributo derivado,monovaluado, simple).
+
+Tipo(fuerte):nombre(atributo clave, monovaluado, simple).
+
+Nacionalidad(fuerte):.
+
+Jurado(fuerte):nombre(atributo clave, monovaluado, simple), telefono(atributo monovaluado, simple), correo(atributo monovaluado, simple), puntaje(atributo monovaluado, simple).
+
+
+3)
+
+4)a) Las funciones de una empresa les puede pertenecer 1 o varias empleados pero cada empleado tiene a la sumo una funcion, y cada recibo de sueldo es obtenido por cada empleado. (corregir cardinalidad a la derecha de funcion poner 1,1 y la cardinalidad (0,n) de recibo por (1,n))
+
+b) Uno o varios clientes pueden comprar un vehiculo usado o nuevo 
