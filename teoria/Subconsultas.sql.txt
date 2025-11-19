@@ -1,0 +1,91 @@
+Subconsultas Escalares: Devuelven un único valor (una sola fila y columna), que puede utilizarse en expresiones de la consulta externa
+
+SELECT titulo, precio
+FROM articulo
+WHERE precio  =  (SELECT max(precio)  FROM articulo)
+         --     > (SELECT precio   FROM articulo where id_articulo = 101)
+         
+
+
+Subconsultas de Múltiples Filas: Devuelven varias filas de una sola columna y, generalmente, se utilizan con operadores como IN, ANY, o ALL.
+
+SELECT * FROM persona p 
+INNER JOIN socio s ON p.id_persona = s.id_socio
+WHERE id_ciudad  IN   =  (SELECT id_ciudad FROM ciudad INNER JOIN provincia USING(id_provincia) WHERE provincia = 'Tucumán');
+                  -- (SELECT * FROM ciudad INNER JOIN provincia USING(id_provincia) WHERE provincia = 'Tucumán');
+                  -- =  (SELECT id_ciudad FROM ciudad INNER JOIN provincia USING(id_provincia) WHERE provincia = 'Tucumán');
+                  
+Se requiere saber si ALGUN precio de los libros de "Alejandro Dumas" es mayor a ALGUN precio de los libros de "Dan Brown":
+
+ SELECT titulo, precio 
+ FROM articulo INNER JOIN autor USING(id_autor)
+ WHERE autor LIKE  '%Alejandro Dumas%' 
+ AND  precio > ANY ( SELECT  precio  FROM articulo INNER JOIN autor USING(id_autor)  WHERE autor LIKE  '%Dan Brown%' )
+ 
+  
+ SELECT titulo, precio
+ FROM articulo 
+ WHERE id_autor = (SELECT id_autor FROM autor WHERE autor LIKE '%Alejandro Dumas%') 
+ AND  precio > ANY (SELECT precio FROM articulo  WHERE id_autor= (SELECT id_autor FROM autor WHERE autor LIKE'%Dan Brown%'))
+ 
+ Se requiere saber si ALGUN precio de los libros de "Alejandro Dumas" es menor a TODOS los precio de libros de "Dan Brown":
+
+ SELECT titulo, precio
+ FROM articulo INNER JOIN autor USING(id_autor)
+ WHERE autor LIKE  '%Alejandro Dumas%' 
+ AND  precio < ALL  ( SELECT  precio  FROM articulo INNER JOIN autor USING(id_autor)  WHERE autor LIKE  '%Dan Brown%' )
+ 
+  
+ SELECT titulo, precio
+ FROM articulo 
+ WHERE id_autor = (SELECT id_autor FROM autor WHERE autor LIKE '%Alejandro Dumas%') 
+ AND  precio < ALL (SELECT precio FROM articulo  WHERE id_autor= (SELECT id_autor FROM autor WHERE autor LIKE'%Dan Brown%'))
+ 
+                  
+Subconsultas Correlacionadas: Se ejecutan una vez por cada fila de la consulta externa, ya que hacen referencia a las columnas de la consulta principal
+
+SELECT titulo, precio FROM articulo a
+WHERE  EXISTS (SELECT * FROM prestamo p WHERE a.id_articulo= p.id_articulo ) 
+
+
+SELECT titulo, precio, id_genero
+FROM articulo a1
+WHERE precio > (SELECT AVG(precio) FROM articulo a2 WHERE a2.id_genero = a1.id_genero);
+
+
+UPDATE articulo
+SET precio = ( SELECT AVG(a2.precio)  FROM ( SELECT precio FROM articulo ) AS a2)
+WHERE id_genero = (SELECT id_genero  FROM ( SELECT id_genero FROM articulo WHERE titulo = '2001: Una Odisea Del Espacio' ) AS sub);
+
+
+UPDATE empleado
+SET  sueldo = sueldo * 1.36
+WHERE id_funcion IN ( SELECT id_funcion FROM funcion WHERE funcion NOT IN ('Gerente Gral', 'Supervisor'));
+
+
+DELETE FROM socio 
+WHERE id_socio NOT IN (SELECT id_cliente FROM pedido);
+
+
+CREATE VIEW ventas_Totales AS (
+SELECT 
+    v.id_venta,
+    ps.nombre AS nombre_socio,
+    pe.nombre AS nombre_empleado,
+    v.fecha,
+    v.total AS monto_total,
+    en.envio,
+    c.ciudad,
+    pro.provincia
+FROM venta v
+INNER JOIN socio s ON v.id_socio = s.id_socio
+INNER JOIN persona ps ON s.id_socio = ps.id_persona
+INNER JOIN empleado e ON v.id_empleado = e.id_empleado
+INNER JOIN persona pe ON e.id_empleado = pe.id_persona
+INNER JOIN envio en   ON en.id_envio = v.id_envio
+INNER JOIN ciudad c   ON c.id_ciudad = s.id_ciudad
+INNER JOIN provincia  pro   ON pro.id_provincia = c.id_provincia);
+
+
+select * from ventas_Totales
+

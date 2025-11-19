@@ -1,0 +1,119 @@
+-- a
+select round(avg(sueldo) ,2) as promedio
+from empleado;
+
+-- b
+
+select max(precio) as masCaro
+from articulo;
+
+-- c
+
+select min(precio) as membresía_económica
+from membresia  
+where membresia!="básico";
+
+-- d
+
+select count(id_venta) as no_entregados
+from venta
+where entregado!="entregado";
+
+-- e
+
+select sum(multa)
+from prestamo
+where fecha_devolucion is null;
+
+-- f, coalesce(cantidad,0) para cosas en nulo
+
+select inicio_prestamo, fin_prestamo, coalesce(fecha_devolucion,'No devuelto') as devolucion
+from prestamo
+where (inicio_prestamo between '2021-11-01' and '2021-11-30') and (fin_prestamo between '2021-11-01' and '2021-11-30')
+order by fin_prestamo;
+
+-- g
+
+select count(id_socio) as cantidad_de_prestamos
+from socio
+inner join prestamo using(id_socio)
+join persona on id_persona=id_socio
+where nombre="Rios Carrasco Claudia Gabriela";
+
+-- h
+
+select persona.nombre as Empleado, count(familiar.nombre) as CantFamiliares
+from empleado
+inner join familiar using(id_empleado)
+join persona on id_empleado=id_persona
+group by Empleado;
+
+-- i
+
+select provincia, count(id_socio) as CantEmpleados
+from socio
+inner join ciudad using(id_ciudad)
+inner join provincia using(id_provincia)
+group by provincia;
+
+
+-- j
+
+select provincia, count(id_socio) as CantEmpleados
+from socio
+inner join ciudad using(id_ciudad)
+inner join provincia using(id_provincia)
+group by provincia
+order by CantEmpleados desc
+limit 1;
+
+
+-- k 
+
+select titulo, extract(month from fecha) as mes, count(id_venta) as CantVentas
+from articulo
+inner join detalle_venta using(id_articulo)
+inner join venta using(id_venta)
+where fecha between '2021-01-01' and '2021-12-31'
+group by mes, titulo
+order by CantVentas desc;
+
+-- l
+
+select membresia ,/*  extract(month from fecha_pago) */ mes, anio, count(id_membresia) as cantidad, sum(precio) as recaudacion
+from membresia
+inner join pago using(id_membresia)
+where fecha_pago<'2021-12-31'
+group by membresia, mes, anio
+having recaudacion>100000
+order by anio, mes asc;
+
+-- m
+
+select nombre, sum(cantidad) as totalArticulos,  sum(detalle_venta.precio*cantidad+ gasto_envio) as recaudacion
+from socio
+join persona on id_persona=id_socio
+inner join venta using(id_socio)
+inner join detalle_venta using(id_venta)
+inner join articulo using(id_articulo)
+group by  nombre
+having totalArticulos > 15
+order by totalArticulos desc, recaudacion desc;
+
+
+-- n
+
+select nombre, funcion, sueldo, TIMESTAMPDIFF(Year, fecha_alta, '2025-10-28') as antiguedad
+from empleado
+inner join funcion using(id_funcion)
+join persona on id_persona=id_empleado
+having antiguedad>5;
+
+-- o
+
+select count(id_empleado) as cantidadEmpleados, TIMESTAMPDIFF(Year, fecha_alta, '2025-10-28') as antiguedad
+from empleado
+join persona on id_persona=id_empleado
+group by antiguedad
+having antiguedad in (5,10,15);
+

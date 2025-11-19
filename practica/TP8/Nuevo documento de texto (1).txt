@@ -1,0 +1,60 @@
+-- a
+
+/*select persona.nombre as empleado, familiar.nombre as nombreF, parentesco 
+from empleado
+inner join familiar using(id_empleado)
+join persona on id_empleado=id_persona;*/
+
+
+select persona.nombre as empleado, familiar.nombre as nombreF, parentesco 
+from empleado
+left join familiar using(id_empleado)
+join persona on id_empleado=id_persona;
+
+-- b
+select coalesce(titulo,'sin titulo') as titulo, coalesce(precio,'sin precio') as precio, coalesce(autor,'sin autor') as autor, coalesce(editorial,'sin editorial') as editorial ,coalesce(origen, 'sin origen') as origen,coalesce(genero,'sin genero') as genero
+from articulo
+left join autor using(id_autor)
+left join editorial using(id_editorial)
+left join genero using(id_genero)
+left join origen using(id_origen);
+
+-- c
+select funcion, count(id_empleado) as cantidadEmpleado
+from empleado
+left join funcion using(id_funcion)
+group by funcion;
+
+-- d
+
+
+
+-- e
+
+
+
+-- punto 2
+
+-- a
+select * 
+from autor
+full join articulo using(id_autor)
+where autor='BeynonDavies Paul';
+
+select MAX(Id_articulo) as maximo
+from articulo;
+/*insert into articulo() values(393,)*/;
+
+
+-- C
+
+DELETE FROM envio where envio='Aerobox';
+-- d
+DELETE FROM envio where envio='Andreani'; -- porque no deja borrar>?
+
+-- e
+DELETE FROM ciudad where ciudad='Casabindo' or ciudad='La Toma' or ciudad='San Jose de Feliciano';
+
+-- f
+alter table venta add constraint
+delete from venta where fecha='2020-09-18';
